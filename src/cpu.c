@@ -43,20 +43,3 @@ void cpu_execute_instruction(CPU *cpu, int instruction) {
       break;
   }
 }
-
-void cpu_handle_interrupt(CPU *cpu, int interrupt_type) {
-  if (!cpu) {
-    fprintf(stderr, "CPU pointer is NULL. Cannot handle interrupt.\n");
-    return;
-  }
-
-  switch (interrupt_type) {
-    case 1:  // Timer Interrupt
-      printf("Timer Interrupt Occurred!\n");
-      break;
-    // ... other interrupt types
-    default:
-      fprintf(stderr, "Unknown interrupt type: %d\n", interrupt_type);
-      break;
-  }
-}

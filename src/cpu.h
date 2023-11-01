@@ -22,12 +22,4 @@ void cpu_init(CPU *cpu);
  */
 void cpu_execute_instruction(CPU *cpu, int instruction);
 
-/**
- * Handles a specified type of interrupt.
- *
- * @param cpu Pointer to the CPU structure.
- * @param interrupt_type The type of interrupt to handle.
- */
-void cpu_handle_interrupt(CPU *cpu, int interrupt_type);
-
 #endif

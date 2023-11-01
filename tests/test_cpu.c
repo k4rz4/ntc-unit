@@ -10,7 +10,18 @@ DEFINE_FFF_GLOBALS
 FAKE_VALUE_FUNC(char, memory_read, Memory *, size_t)
 FAKE_VOID_FUNC(io_write, int, char)
 
-TestSuite(cpu_tests);
+void setup(void) {
+  // Resets
+  RESET_FAKE(memory_read);
+  RESET_FAKE(io_write);
+}
+
+TestSuite(cpu_tests, .init = setup);  // Add the setup function to reset mocks
+
+Test(cpu_tests, test_cpu_init_null_pointer) {
+  cpu_init(NULL);
+  // Here, capture and check stderr to assert the error message.
+}
 
 Test(cpu_tests, test_cpu_init) {
   CPU cpu;
@@ -29,6 +40,7 @@ Test(cpu_tests, test_cpu_execute_read_memory_instruction) {
   cpu_execute_instruction(&cpu, 1);
 
   cr_assert(memory_read_fake.call_count == 1, "memory_read was not called");
+  // Further assert on parameters if necessary.
 }
 
 Test(cpu_tests, test_cpu_execute_io_write_instruction) {
@@ -41,6 +53,12 @@ Test(cpu_tests, test_cpu_execute_io_write_instruction) {
   cr_assert(io_write_fake.call_count == 1, "io_write was not called");
   cr_assert_eq(io_write_fake.arg0_val, 0, "Expected port to be 0");
   cr_assert_eq(io_write_fake.arg1_val, 'A', "Expected value to be 'A'");
+}
+
+Test(cpu_tests, test_cpu_execute_null_pointer) {
+  cpu_execute_instruction(NULL, 1);
+
+  // Check stderr for the appropriate error message
 }
 
 Test(cpu_tests, test_cpu_invalid_instruction) {

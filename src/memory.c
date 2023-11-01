@@ -44,7 +44,6 @@ void memory_write(Memory *mem, size_t address, char value) {
   }
 }
 
-#ifndef TEST_MEMORY_READ
 char memory_read(Memory *mem, size_t address) {
   if (mem == NULL) {
     fprintf(stderr, "Memory pointer is NULL. Cannot perform read operation.\n");
@@ -59,5 +58,4 @@ char memory_read(Memory *mem, size_t address) {
             address);
     return -1;  // Error sentinel value
   }
-#endif
 }

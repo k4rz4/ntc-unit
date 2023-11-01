@@ -5,9 +5,10 @@ TEST_DIR = tests
 OBJ_DIR = obj
 BIN_DIR = bin
 
-# Define source files and their corresponding object files
+# Define source files, their corresponding object files, and dependencies
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
+DEPS = $(wildcard $(SRC_DIR)/*.h)
 
 # For tests, we remove the real implementation of the functions we're faking
 TEST_OBJ_FILES = $(filter-out $(OBJ_DIR)/memory.o $(OBJ_DIR)/io.o,$(OBJ_FILES))
@@ -26,7 +27,7 @@ $(OBJ_DIR)/tests: $(OBJ_FILES) $(wildcard $(TEST_DIR)/*.c)
 	$(CC) $(CFLAGS) -I$(SRC_DIR) $^ -lcriterion -o $@
 
 # Rule to compile source files into object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Create necessary directories
@@ -35,3 +36,6 @@ $(BIN_DIR) $(OBJ_DIR):
 
 clean:
 	rm -rf $(BIN_DIR) $(OBJ_DIR)
+	rm -f *~ $(SRC_DIR)/*~
+
+.PHONY: all test clean
